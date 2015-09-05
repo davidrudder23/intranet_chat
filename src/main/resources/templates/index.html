@@ -1,0 +1,38 @@
+<html ng-app="chatApp">
+
+<head>
+<title>Intranet Chat</title>
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.min.js"></script>
+
+<style type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></style>
+
+<!-- Custom scripts and styles -->
+<script src="chat.js"></script>
+
+</head>
+
+<body ng-controller="ChatController">
+
+	<div>
+		<input ng-model="username" type="text" name="username" id="username"
+			placeholder="Username" value="Guest" />
+	</div>
+
+	<div>
+		Message:
+		<textarea ng-model="message" rows="4" cols="40" id="message"></textarea>
+		<button id="submit-button" ng-click="submitMessage()">Submit!</button>
+	</div>
+
+	<div id="messages" class="hero">
+	<ul>
+	<li ng-repeat="message in messages">
+		<label>{{ message.account.username }}: </label>{{ message.message }}
+	</li>
+	</ul>
+	</div>
+</body>
+</html>
