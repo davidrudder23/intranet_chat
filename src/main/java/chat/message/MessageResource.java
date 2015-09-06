@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import chat.room.Room;
 @Controller
 @RequestMapping("/message")
 public class MessageResource {
+    static Logger logger = LoggerFactory.getLogger(MessageResource.class);
 	
 	@Autowired
 	AccountRepository accountRepository;
