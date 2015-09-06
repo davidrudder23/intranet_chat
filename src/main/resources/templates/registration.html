@@ -24,9 +24,6 @@
         <form action="/register" method="post">               
             <fieldset>
                 <legend>Join Chat!!!</legend>
-                <div th:if="${param.error}" class="alert alert-error">    
-                    Invalid username and password.
-                </div>
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" ng-model="username"/>        
                 <label for="password">Password</label>

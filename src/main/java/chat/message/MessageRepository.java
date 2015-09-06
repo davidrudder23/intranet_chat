@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import chat.room.Room;
+
 public interface MessageRepository extends CrudRepository<Message, Long>{
 	
-	public List<Message> findByDateGreaterThan(Date date);
+	public List<Message> findByRoomAndDateGreaterThan(Room room, Date date);
 
 }

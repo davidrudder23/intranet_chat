@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import chat.account.Account;
+import chat.room.Room;
 
 @Configurable
 @Entity
@@ -27,14 +28,19 @@ public class Message {
     
     Date date;
     
+    @ManyToOne
+    Room room;
+    
     public Message () {
     	this.account = null;
+    	this.room = null;
     	this.message = "";
     	this.date = new Date();
     }
 
-    public Message (Account account, String message) {
+    public Message (Account account, Room room, String message) {
     	this.account = account;
+    	this.room = room;
     	this.message = message;
     	this.date = new Date();
     }
@@ -54,6 +60,9 @@ public class Message {
 	public Date getDate() {
 		return date;
 	}
-    
+   
+	public Room getRoom() {
+		return room;
+	}
     
 }

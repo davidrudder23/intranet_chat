@@ -16,6 +16,13 @@
 
 <body ng-controller="ChatController">
 	<div>
+		<label>Room</label>
+		<select ng-model="room">
+		      <option value="none">---Please select---</option> <!-- not selected / blank option -->
+		      <option ng-repeat="option in rooms" value="{{option.id}}">{{option.name}}</option>
+		</select>
+	</div>
+	<div>
 		Message:
 		<textarea ng-model="message" rows="4" cols="40" id="message"></textarea>
 		<button id="submit-button" ng-click="submitMessage()">Submit!</button>

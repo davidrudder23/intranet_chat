@@ -20,7 +20,4 @@ public class ChatPasswordEncoder implements PasswordEncoder {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
-
-
-
 }
