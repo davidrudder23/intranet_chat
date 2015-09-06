@@ -1,0 +1,41 @@
+<html ng-app="registrationApp">
+
+<head>
+<title>Intranet Chat Registration</title>
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.min.js"></script>
+
+<style type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></style>
+
+<!-- Custom scripts and styles -->
+<script src="js/registration.js"></script>
+
+</head>
+
+<body ng-controller="RegistrationController">
+
+	<div class="hero">
+	Chat is an awesome application for chatting!  
+	</div>
+	
+    <div >
+        <form action="/register" method="post">               
+            <fieldset>
+                <legend>Join Chat!!!</legend>
+                <div th:if="${param.error}" class="alert alert-error">    
+                    Invalid username and password.
+                </div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" ng-model="username"/>        
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" ng-model="password"/>    
+                <div class="form-actions">
+                    <button type="submit" class="btn">Log in</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

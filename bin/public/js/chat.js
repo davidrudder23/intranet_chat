@@ -5,7 +5,6 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 
 	$scope.submitMessage = function() {
 		$http.post("/message/submitMessage", {
-			username: $scope.username,
 			message: $scope.message
 		}, {
 	        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
