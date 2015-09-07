@@ -68,8 +68,9 @@
 
 							<div class="media">
 								<div class="media-body">
-									<h5>{{ latestAccountMessage.account.username}} | User</h5>
-									<small>{{ latestAccountMessage.message }}</small>
+									<h5>{{ latestAccountMessage.account.username}}</h5>
+									<small>{{ latestAccountMessage.message }}</small><br/>
+									<small class="text-muted">In <em>{{ latestAccountMessage.room.name }}</em></small><br/>
 									<small class="text-muted">Sent {{ latestAccountMessage.date }} </small>
 								</div>
 							</div>
