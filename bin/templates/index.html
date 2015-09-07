@@ -9,31 +9,78 @@
 
 <style type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></style>
 
+<link href="/css/bootstrap.css" rel="stylesheet" />
+
 <!-- Custom scripts and styles -->
 <script src="js/chat.js"></script>
 
 </head>
 
 <body ng-controller="ChatController">
-	<div>
-		<label>Room</label>
-		<select ng-model="room">
-		      <option value="none">---Please select---</option> <!-- not selected / blank option -->
-		      <option ng-repeat="option in rooms" value="{{option.id}}">{{option.name}}</option>
-		</select>
-	</div>
-	<div>
-		Message:
-		<textarea ng-model="message" rows="4" cols="40" id="message"></textarea>
-		<button id="submit-button" ng-click="submitMessage()">Submit!</button>
-	</div>
 
-	<div id="messages" class="hero">
-	<ul>
-	<li ng-repeat="message in messages">
-		<label>{{ message.account.username }}: </label>{{ message.message }}
-	</li>
-	</ul>
+	<div class="col-md-8">
+		<div class="panel panel-info">
+			<div class="panel-heading">RECENT CHAT HISTORY
+			<span style="float: right">
+			<select ng-model="room">
+				<option ng-repeat="option in rooms" value="{{option.id}}">{{option.name}}</option>
+			</select>
+			</span></div>
+			
+			<div class="panel-body">
+				<ul class="media-list">
+					<li class="media" ng-repeat="message in messages">
+
+						<div class="media-body">
+
+							<div class="media">
+								<div class="media-body">
+									{{ message.message }} <br /> <small
+										class="text-muted">{{ message.account.username }} | {{ message.date }} </small>
+									<hr />
+								</div>
+							</div>
+
+						</div>
+					</li>
+
+				</ul>
+			</div>
+			<div class="panel-footer">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="message" placeholder="Enter Message" />
+					<span class="input-group-btn">
+						<button class="btn btn-info" type="button" ng-click="submitMessage()">SEND</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">ONLINE USERS</div>
+			<div class="panel-body">
+				<ul class="media-list">
+
+					<li class="media" ng-repeat="latestAccountMessage in latestAccountMessages">
+
+						<div class="media-body">
+
+							<div class="media">
+								<div class="media-body">
+									<h5>{{ latestAccountMessage.account.username}} | User</h5>
+									<small>{{ latestAccountMessage.message }}</small>
+									<small class="text-muted">Sent {{ latestAccountMessage.date }} </small>
+								</div>
+							</div>
+
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+
 	</div>
 </body>
 </html>

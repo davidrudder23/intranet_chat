@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,17 @@ public class MessageResource {
 		calendar.add(Calendar.MINUTE, -30);
 		
 		List<Message> messages = messageRepository.findByRoomAndDateGreaterThan(room, calendar.getTime());
+		return messages;
+	}
+	
+	@RequestMapping("/getLatestPerAccount")
+	public @ResponseBody List<Message> getLatestPerAccount() {
+		Iterable<Account> accounts = accountRepository.findAll();
+		List<Message> messages = StreamSupport.stream(accounts.spliterator(), false)
+				.filter(a->(messageRepository.countByAccount(a)>0))
+				.map(a->messageRepository.findFirst1ByAccountOrderByDateDesc(a))
+				.sorted((a,b)->b.getDate().compareTo(a.getDate()))
+				.collect(Collectors.toList());
 		return messages;
 	}
 }

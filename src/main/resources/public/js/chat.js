@@ -4,7 +4,6 @@ var chatApp = angular.module('chatApp', []);
 chatApp.controller('ChatController', function ($scope, $interval, $http) {
 	
 	$scope.submitMessage = function() {
-		console.log($scope.room);
 		if ($scope.room == "none") {
 			return;
 		}
@@ -23,7 +22,7 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 		});
 	}
 	
-	getMessages = $interval(function() {
+	var getMessagesInterval = $interval(function() {
 		var getMessagesPromise = $http.get("/message/getMessages/"+$scope.room);
 		getMessagesPromise.success(function(data, status, headers, config) {
 			$scope.messages = data;
@@ -33,7 +32,14 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 	var getRoomsPromise = $http.get("/room/getAll");
 	getRoomsPromise.success(function(data, status, headers, config) {
 		$scope.rooms = data;
-		console.log(data);
+		$scope.room = $scope.rooms[1].value;
 	});
+	
+	var getLatestMessagesInterval = $interval(function() {
+		var getLatestMessagesPromise = $http.get("/message/getLatestPerAccount");
+		getLatestMessagesPromise.success(function(data, status, headers, config) {
+			$scope.latestAccountMessages = data;
+		});
+	}, 10000);
 	
 });
