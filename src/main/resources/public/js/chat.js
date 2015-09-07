@@ -19,15 +19,22 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 	            }
 	            return $.param(data);
 	        } 
+		}).success(function() {
+			$scope.getMessages();
 		});
 	}
 	
-	var getMessagesInterval = $interval(function() {
+	$scope.getMessages = function() {
 		var getMessagesPromise = $http.get("/message/getMessages/"+$scope.room);
 		getMessagesPromise.success(function(data, status, headers, config) {
 			$scope.messages = data;
         });
+	};
+	
+	var getMessagesInterval = $interval(function() {
+		$scope.getMessages();
 	}, 2000);
+	$scope.getMessages();
 	
 	var getRoomsPromise = $http.get("/room/getAll");
 	getRoomsPromise.success(function(data, status, headers, config) {
@@ -35,11 +42,16 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 		$scope.room = $scope.rooms[1].value;
 	});
 	
-	var getLatestMessagesInterval = $interval(function() {
+	$scope.getLatestMessages = function() {
 		var getLatestMessagesPromise = $http.get("/message/getLatestPerAccount");
 		getLatestMessagesPromise.success(function(data, status, headers, config) {
 			$scope.latestAccountMessages = data;
 		});
+	};
+	
+	var getLatestMessagesInterval = $interval(function() {
+		$scope.getLatestMessages();
 	}, 10000);
+	$scope.getLatestMessages();
 	
 });
