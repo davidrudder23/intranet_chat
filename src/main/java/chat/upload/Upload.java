@@ -24,6 +24,23 @@ public class Upload {
     String originalUrl;
     
     String thumbnailUrl;
+
+	public long getId() {
+		return id;
+	}
+
+	public Message getMessage() {
+		return message;
+	}
+
+	public String getOriginalUrl() {
+		return originalUrl;
+	}
+
+	public String getThumbnailUrl() {
+		return thumbnailUrl;
+	}
+
     
     
 }

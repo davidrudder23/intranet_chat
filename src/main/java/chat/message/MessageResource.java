@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import chat.account.Account;
 import chat.account.AccountRepository;
 import chat.room.Room;
+import chat.upload.UploadException;
 import chat.upload.UploadService;
 import chat.util.HttpUtils;
 
@@ -60,12 +61,9 @@ public class MessageResource {
 		
 		if ((file != null) && (!file.isEmpty())) {
 			try {
-				File s3File = new File("");
-				file.transferTo(s3File);
-				uploadService.uploadFile(messageObject, s3File);
-			} catch (IllegalStateException | IOException e) {
-				return HttpUtils.getFailureStatus("File Transfer Failed");
-				Map<String, Object> status = new HashMap<String, Object>();
+				uploadService.uploadFile(messageObject, file);
+			} catch (UploadException e) {
+				return HttpUtils.getFailureStatus("File Transfer Failed", e);
 			}
 		}
 		

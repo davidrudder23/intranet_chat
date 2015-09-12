@@ -47,7 +47,7 @@ chatApp.controller('ChatController', function ($scope, $interval, $http, Upload)
 	
 	var getMessagesInterval = $interval(function() {
 		$scope.getMessages();
-	}, 2000);
+	}, 200000);
 	$scope.getMessages();
 	
 	var getRoomsPromise = $http.get("/room/getAll");

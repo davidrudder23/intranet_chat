@@ -1,10 +1,10 @@
 package chat.upload;
 
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 import chat.message.Message;
 
 public interface UploadService {
 
-	public Upload uploadFile(Message message, File file);
+	public Upload uploadFile(Message message, MultipartFile file) throws UploadException;
 }

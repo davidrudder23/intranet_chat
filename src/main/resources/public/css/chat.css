@@ -17,3 +17,7 @@
     cursor: inherit;
     display: block;
 }
+
+.chat-thumbnail {
+	max-width: 60%;
+}
