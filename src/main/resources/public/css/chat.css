@@ -18,6 +18,10 @@
     display: block;
 }
 
-.chat-thumbnail {
+.chat-thumbnail-large {
 	max-width: 60%;
+}
+
+.chat-thumbnail-small {
+	max-width: 30%;
 }

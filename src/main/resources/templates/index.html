@@ -19,22 +19,38 @@
 <!-- Custom scripts and styles -->
 <script src="js/chat.js"></script>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body ng-controller="ChatController">
 
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+		
+			<div class="navbar-header">
+				You're chatting in &nbsp;&nbsp;&nbsp;
+				
+				<span style="float: right">
+					<select ng-model="room" ng-change="getMessages()" ng-options="option.name for option in rooms">
+					</select>
+				</span>
+			</div>
+		</div>
+	</nav>
+	
+	<div min-height="3em;"><br/><br/><br/></div>
+  
 	<div class="col-md-8">
 		<div class="panel panel-info">
 			<div class="panel-heading">RECENT CHAT HISTORY
-			<span style="float: right">
-			<select ng-model="room" ng-change="getMessages()">
-				<option ng-repeat="option in rooms" value="{{option.id}}">{{option.name}}</option>
-			</select>
-			</span></div>
+			</div>
 			
 			<div class="panel-body">
-				<div class="input-group">
-					<input type="text" class="form-control" ng-model="message" placeholder="Enter Message" ng-keyup="$event.keyCode == 13 ? submitMessage() : null"/>
+				<div class="form-group">
+					<textarea rows="2" class="form-control" ng-model="message" placeholder="Enter Message" ng-keyup="$event.keyCode == 13 ? submitMessage() : null"/>
+				</div>
+				<div class="btn-group" role="group">
+				
 					<span class="btn btn-default btn-file">
 					    Upload File <input type="file" ngf-select="submitMessage(file)" name="file" ng-model="file" ngf-max-size="20MB" ngf-pattern="'image/*'" />
 					</span>
@@ -51,7 +67,7 @@
 							<div class="media">
 								<div class="media-body">
 									<span ng-repeat="url in message.uploadedURLs">
-										<img src="{{url}}" class="chat-thumbnail"/>
+										<img src="{{url}}" class="chat-thumbnail-large"/>
 									</span>
 								</div>
 								<div class="media-body">
@@ -90,7 +106,7 @@
 							<div class="media">
 								<div class="media-body">
 									<span ng-repeat="url in latestAccountMessage.uploadedURLs">
-										<img src="{{url}}" class="chat-thumbnail"/>
+										<img src="{{url}}" class="chat-thumbnail-small"/>
 									</span>
 								</div>
 								<div class="media-body">

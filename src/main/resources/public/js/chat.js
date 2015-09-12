@@ -7,12 +7,15 @@ chatApp.controller('ChatController', function ($scope, $interval, $http, Upload)
 		if (($scope.room==undefined) || ($scope.room == "none")) {
 			return;
 		}
+		if (($scope.room.id==undefined) || ($scope.room.id == "none")) {
+			return;
+		}
 		
 		console.log($scope.file);
 		Upload.upload({
 	        url: '/message/submitMessage',
 	        fields: {'message': $scope.message,
-	        		 'room': $scope.room},
+	        		 'room': $scope.room.id},
 	        file: file
 	    }).success(function (data, status, headers, config) {
 			$scope.message = "";
@@ -39,7 +42,10 @@ chatApp.controller('ChatController', function ($scope, $interval, $http, Upload)
 	}
 	
 	$scope.getMessages = function() {
-		var getMessagesPromise = $http.get("/message/getMessages/"+$scope.room);
+		if ($scope.room == undefined) {
+			return;
+		}
+		var getMessagesPromise = $http.get("/message/getMessages/"+$scope.room.id);
 		getMessagesPromise.success(function(data, status, headers, config) {
 			$scope.messages = data;
         });
@@ -47,13 +53,13 @@ chatApp.controller('ChatController', function ($scope, $interval, $http, Upload)
 	
 	var getMessagesInterval = $interval(function() {
 		$scope.getMessages();
-	}, 200000);
+	}, 2000);
 	$scope.getMessages();
 	
 	var getRoomsPromise = $http.get("/room/getAll");
 	getRoomsPromise.success(function(data, status, headers, config) {
 		$scope.rooms = data;
-		$scope.room = $scope.rooms[1].value;
+		$scope.room = $scope.rooms[0];
 	});
 	
 	$scope.getLatestMessages = function() {
