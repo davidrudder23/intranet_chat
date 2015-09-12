@@ -10,7 +10,7 @@ import chat.room.Room;
 
 public interface MessageRepository extends CrudRepository<Message, Long>{
 	
-	public List<Message> findByRoomAndDateGreaterThan(Room room, Date date);
+	public List<Message> findByRoomAndDateGreaterThanOrderByDateDesc(Room room, Date date);
 
 	public Message findFirst1ByAccountOrderByDateDesc(Account account);
 

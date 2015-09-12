@@ -1,14 +1,27 @@
-var chatApp = angular.module('chatApp', []);
+var chatApp = angular.module('chatApp', ['ngFileUpload']);
 
 
-chatApp.controller('ChatController', function ($scope, $interval, $http) {
+chatApp.controller('ChatController', function ($scope, $interval, $http, Upload) {
 	
-	$scope.submitMessage = function() {
-		if ($scope.room == "none") {
+	$scope.submitMessage = function(file) {
+		if (($scope.room==undefined) || ($scope.room == "none")) {
 			return;
 		}
 		
-		$http.post("/message/submitMessage", {
+		console.log($scope.file);
+		Upload.upload({
+	        url: '/message/submitMessage',
+	        fields: {'message': $scope.message,
+	        		 'room': $scope.room},
+	        file: file
+	    }).success(function (data, status, headers, config) {
+			$scope.message = "";
+			$scope.file = "";
+			$scope.getMessages();
+	    });
+		 
+		
+		/*$http.post("/message/submitMessage", {
 			message: $scope.message,
 			room: $scope.room
 		}, {
@@ -20,8 +33,9 @@ chatApp.controller('ChatController', function ($scope, $interval, $http) {
 	            return $.param(data);
 	        } 
 		}).success(function() {
+			$scope.message = "";
 			$scope.getMessages();
-		});
+		});*/
 	}
 	
 	$scope.getMessages = function() {

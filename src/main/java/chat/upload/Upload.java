@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -17,11 +18,12 @@ public class Upload {
     @GeneratedValue(strategy=GenerationType.AUTO)
     long id;
     
+    @ManyToOne
     Message message;
     
     String originalUrl;
     
-    String thumbnaulUrl;
+    String thumbnailUrl;
     
     
 }

@@ -1,5 +1,7 @@
 package chat.message;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,11 +19,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import chat.account.Account;
 import chat.account.AccountRepository;
 import chat.room.Room;
+import chat.upload.UploadService;
+import chat.util.HttpUtils;
 
 @Controller
 @RequestMapping("/message")
@@ -33,9 +39,12 @@ public class MessageResource {
 	
 	@Autowired
 	MessageRepository messageRepository;
+	
+	@Autowired
+	UploadService uploadService;
 
 	@RequestMapping("/submitMessage")
-	public @ResponseBody Map<String, Object> submitMessage(Room room, String message, Model model) {
+	public @ResponseBody Map<String, Object> submitMessage(Room room, String message, @RequestParam(value="file", required = false) MultipartFile file, Model model) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
@@ -43,15 +52,22 @@ public class MessageResource {
 		
 		if (account == null) {
 			// This shouldn't happen because we need an account to pass authentication
-			Map<String, Object> status = new HashMap<String, Object>();
-			status.put ("status", "Failure");
-			status.put ("message", "Authentication failed");
-			status.put ("date", new Date());
-			return status;
+			return HttpUtils.getFailureStatus("Authentication Failed");
 		}
 		
 		Message messageObject = new Message(account, room, message);
 		messageRepository.save(messageObject);
+		
+		if ((file != null) && (!file.isEmpty())) {
+			try {
+				File s3File = new File("");
+				file.transferTo(s3File);
+				uploadService.uploadFile(messageObject, s3File);
+			} catch (IllegalStateException | IOException e) {
+				return HttpUtils.getFailureStatus("File Transfer Failed");
+				Map<String, Object> status = new HashMap<String, Object>();
+			}
+		}
 		
 		Map<String, Object> status = new HashMap<String, Object>();
 		status.put ("status", "Success");
@@ -65,7 +81,7 @@ public class MessageResource {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, -30);
 		
-		List<Message> messages = messageRepository.findByRoomAndDateGreaterThan(room, calendar.getTime());
+		List<Message> messages = messageRepository.findByRoomAndDateGreaterThanOrderByDateDesc(room, calendar.getTime());
 		return messages;
 	}
 	

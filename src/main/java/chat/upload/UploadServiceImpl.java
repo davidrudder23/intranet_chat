@@ -9,18 +9,38 @@ import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import chat.message.Message;
+import chat.message.MessageResource;
 
+@Service
 public class UploadServiceImpl implements UploadService {
+    static Logger logger = LoggerFactory.getLogger(MessageResource.class);
+
 	@Autowired
 	UploadRepository uploadRepository;
+
+	@Value("${aws.access.key}")
+	private String awsAccessKey;
+	
+	@Value("${aws.secret.key}")
+	private String awsSecretKey;
+	
 	
 	public Upload uploadFile(Message message, File file) {
 		Upload upload = new Upload();
 		
-		uploadToS3("upload-"+message.getId()+"-original", file);
+		String url = uploadToS3("upload-"+message.getId()+"-original", file);
+		
+		upload.message = message;
+		upload.originalUrl = url;
+		uploadRepository.save(upload);
+		
 		return upload;
 	}
 	
@@ -32,11 +52,10 @@ public class UploadServiceImpl implements UploadService {
 	 */
 	String uploadToS3(String name, File file) {
 		String url = null;
+		
+		logger.debug("AWS Access Key = "+awsAccessKey);
 		try {
-			String awsAccessKey = "YOUR_AWS_ACCESS_KEY";
-			String awsSecretKey = "YOUR_AWS_SECRET_KEY";
-			AWSCredentials awsCredentials = 
-			    new AWSCredentials(awsAccessKey, awsSecretKey);
+			AWSCredentials awsCredentials = new AWSCredentials(awsAccessKey, awsSecretKey);
 			
 			S3Service s3Service = new RestS3Service(awsCredentials);
 	
@@ -47,12 +66,11 @@ public class UploadServiceImpl implements UploadService {
 			if (bucket == null) {
 				bucket = s3Service.createBucket(bucket);
 			}
-			s3Service.putObject(bucket, object)
+			s3Service.putObject(bucket, object);
 		} catch (S3ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Could not upload to S3", e);
 		}
 		
-		return ulr;
+		return url;
 	}
 }
